@@ -23,6 +23,14 @@
     (define/override (interp-program ast)
       (verbose "interp-program" ast)
       (match ast
+        [(ProgramDefsExp info ds body)
+         (let ([top-level (for/list ([d ds]) (interp-def d))])
+           (for ([f (in-dict-values top-level)])
+             (set-box! f (match (unbox f)
+                           [`(function ,xs ,body ())
+                            `(function ,xs ,body ,top-level)])))
+           ((interp-exp top-level) body))]
+
         [(ProgramDefs info ds)
          ((initialize!) runtime-config:rootstack-size
                         runtime-config:heap-size)
@@ -32,7 +40,7 @@
                          [`(function ,xs ,body ())
                           `(function ,xs ,body ,top-level)])))
          ((interp-exp top-level) (Apply (Var 'main) '()))]))
-        
+
     ))
 
 (define interp-Lfun-prime-class (interp-Lfun-prime-mixin

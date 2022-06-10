@@ -16,6 +16,11 @@
     (super-new)
     (inherit check-type-equal?)
 
+    ;; (vector (vector 1) 2 3)
+    ;; (vector 1) -- (HasType (Prim 'vector (list 1)) (Vector 'Integer))
+    ;; 2 -- (Int 2)
+    ;; 3 -- (Int 3)
+
     (define/override (type-check-exp env)
       (lambda (e)
         (define recur (type-check-exp env))
@@ -25,7 +30,18 @@
              (error 'type-check "vector too large ~a, max is 50" (length es)))
            (define-values (e* t*) (for/lists (e* t*) ([e es]) (recur e)))
            (define t `(Vector ,@t*))
+           ;; distinguish elements in tuple that are
+           ;; themselves tuples from elements that are not.
            (values (HasType (Prim 'vector e*) t)  t)]
+          ;; open backdoor for (vector-ref [vec : (Vector Integer Integer ...)]
+          ;;                               [var : Integer])
+          [(Prim 'vector-ref (list e1 (Var x)))
+           (define-values (e1^ t) (recur e1))
+           (define-values (_ t^) (recur (Var x)))
+           (match `(,t . ,t^)
+             [`((Vector ,ts ...) . Integer)
+              (values (Prim 'vector-ref (list e1^ (Var x))) 'Integer)]
+             [else (error 'type-check "expect Vector, not ~a\nin ~v" t e)])]
           [(Prim 'vector-ref (list e1 (Int i)))
            (define-values (e1^ t) (recur e1))
            (match t
@@ -41,6 +57,8 @@
              [`(Vector ,ts ...)
               (unless (and (0 . <= . i) (i . < . (length ts)))
                 (error 'type-check "index ~a out of bounds\nin ~v" i e))
+              ;; Does the type of arg need to be same as
+              ;; the element in the tuple being replaced?
               (check-type-equal? (list-ref ts i) t-arg e)
               (values (Prim 'vector-set! (list e-vec (Int i) e-arg^))  'Void)]
              [else (error 'type-check "expect Vector, not ~a\nin ~v" t-vec e)])]

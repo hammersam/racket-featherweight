@@ -2277,7 +2277,7 @@ Added structs for AST nodes.
                               (check-not-equal? (cadr result) 'timed-out (format "x86 execution timed out after ~a seconds" (caddr result)))
                               (cond [error-expected
                                      (check-equal? (cadr result) 'done-error (format "expected error, not: ~a" (caddr result)))
-                                     (check-equal? (caddr result) 255 (format "expected error, not: ~a" (caddr result)))]
+                                     (check-equal? (caddr result) 10000 (format "expected error, not: ~a" (caddr result)))]
                                     [else
                                      (check-not-eq? (cadr result) eof "x86 execution did not produce output")
                                      (check result-check (caddr result) output "Mismatched output from x86 execution")]))))))))))))))

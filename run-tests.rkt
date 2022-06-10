@@ -1,10 +1,10 @@
-#! /usr/bin/env racket
 #lang racket
 
 (require "utilities.rkt")
-(require "interp-Lvar.rkt")
-(require "interp-Cvar.rkt")
-(require "interp.rkt")
+(require "interp-Lvec-prime.rkt")
+(require "type-check-Lvec.rkt")
+(require "interp-Lfun-prime.rkt")
+(require "type-check-Lfun.rkt")
 (require "compiler.rkt")
 ;; (debug-level 1)
 ;; (AST-output-syntax 'concrete-syntax)
@@ -24,9 +24,13 @@
           (string=? r (car (string-split p "_"))))
         all-tests)))
 
-(interp-tests "var" #f compiler-passes interp-Lvar "var_test" (tests-for "var"))
+;; (interp-tests "var" type-check-Lvec compiler-passes interp-Lvec-prime "var_test" (tests-for "var"))
+;; (interp-tests "cond" type-check-Lvec compiler-passes interp-Lvec-prime "cond_test" (tests-for "cond"))
+;; (interp-tests "while" type-check-Lvec compiler-passes interp-Lvec-prime "while_test" (tests-for "while"))
+;; (interp-tests "vectors" type-check-Lvec compiler-passes interp-Lvec-prime "vectors_test" (tests-for "vectors"))
+;; (compiler-tests "var" type-check-Lvec compiler-passes "var_test" (tests-for "var"))
+;; (compiler-tests "cond" type-check-Lvec compiler-passes "cond_test" (tests-for "cond"))
+;; (compiler-tests "while" type-check-Lvec compiler-passes "while_test" (tests-for "while"))
+;; (compiler-tests "vectors" type-check-Lvec compiler-passes "vectors_test" (tests-for "vectors"))
 
-
-;; Uncomment the following when all the passes are complete to
-;; test the final x86 code.
-;; (compiler-tests "var" #f compiler-passes "var_test" (tests-for "var"))
+(interp-tests "functions" type-check-Lfun compiler-passes interp-Lfun-prime "functions_test" (tests-for "functions"))

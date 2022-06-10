@@ -60,3 +60,9 @@
     (add-vertex! g (second e))
     (add-directed-edge! g (first e) (second e)))
   g)
+
+(define (graph-non-empty? g)
+  (define n 0)
+  (for ([u (in-vertices g)])
+    (set! n (+ n 1)))
+  (> n 0))

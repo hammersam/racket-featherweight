@@ -24,6 +24,11 @@
       (define-values (e* ty*) (for/lists (e* ty*) ([e (in-list es)])
                                 ((type-check-exp env) e)))
       (match ty
+        [`(,ty^* ... (Vector ,ts ...) -> ,rt)
+         #:when (> (length ty*) 6)
+         (for ([arg-ty ty*] [param-ty (append ty^* ts)])
+           (check-type-equal? arg-ty param-ty (Apply e es)))
+         (values e^ e* rt)]
         [`(,ty^* ... -> ,rt)
          (for ([arg-ty ty*] [param-ty ty^*])
            (check-type-equal? arg-ty param-ty (Apply e es)))

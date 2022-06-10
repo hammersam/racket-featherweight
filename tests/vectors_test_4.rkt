@@ -1,0 +1,6 @@
+(let ([v1 (vector 20 22)])
+  (let ([v2 (vector 10 23)])
+    (let ([v3 (vector 12 (- 10))])
+      (+ (vector-ref v1 0)
+         (+ (vector-ref v2 0)
+            (vector-ref v3 0))))))
