@@ -15,6 +15,7 @@
 
     (define/public (operator-types)
       '((+ . ((Integer Integer) . Integer))
+        (* . ((Integer Integer) . Integer))
         (- . ((Integer) . Integer))
         (read . (() . Integer))))
 

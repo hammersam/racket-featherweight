@@ -1666,7 +1666,7 @@ Added structs for AST nodes.
 (define (parse-exp e)
   (match e
     [(? symbol?) (Var e)]
-    [(? fixnum?) (Int e)]
+    [(? fixnum?) (Int e)] ; -2^60 <= e <= 2^60 - 1
     [(? boolean?) (Bool e)]
     [`(void) (Void)]
     [`(let ([,x ,rhs]) ,body) (Let x (parse-exp rhs) (parse-exp body))]

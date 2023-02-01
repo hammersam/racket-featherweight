@@ -2,9 +2,11 @@
 
 (require "utilities.rkt")
 (require "interp-Lvec-prime.rkt")
-(require "type-check-Lvec.rkt")
 (require "interp-Lfun-prime.rkt")
+(require "interp-Lvar.rkt")
+(require "type-check-Lvec.rkt")
 (require "type-check-Lfun.rkt")
+(require "type-check-Lvar.rkt")
 (require "compiler.rkt")
 ;; (debug-level 1)
 ;; (AST-output-syntax 'concrete-syntax)
@@ -24,7 +26,7 @@
           (string=? r (car (string-split p "_"))))
         all-tests)))
 
-;; (interp-tests "var" type-check-Lvec compiler-passes interp-Lvec-prime "var_test" (tests-for "var"))
+(interp-tests "var" type-check-Lfun compiler-passes interp-Lfun-prime "var_test" (tests-for "var"))
 ;; (interp-tests "cond" type-check-Lvec compiler-passes interp-Lvec-prime "cond_test" (tests-for "cond"))
 ;; (interp-tests "while" type-check-Lvec compiler-passes interp-Lvec-prime "while_test" (tests-for "while"))
 ;; (interp-tests "vectors" type-check-Lvec compiler-passes interp-Lvec-prime "vectors_test" (tests-for "vectors"))
@@ -33,4 +35,4 @@
 ;; (compiler-tests "while" type-check-Lvec compiler-passes "while_test" (tests-for "while"))
 ;; (compiler-tests "vectors" type-check-Lvec compiler-passes "vectors_test" (tests-for "vectors"))
 
-(interp-tests "functions" type-check-Lfun compiler-passes interp-Lfun-prime "functions_test" (tests-for "functions"))
+;; (interp-tests "functions" type-check-Lfun compiler-passes interp-Lfun-prime "functions_test" (tests-for "functions"))

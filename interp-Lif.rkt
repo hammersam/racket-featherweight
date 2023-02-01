@@ -16,6 +16,7 @@
       (verbose "Lif/interp-op" op)
       (match op
         ['+ fx+]
+        ['* fx*]
         ['- fx-]
         ['read read-fixnum]
         ['not (lambda (v) (match v [#t #f] [#f #t]))]

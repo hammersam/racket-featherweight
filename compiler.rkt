@@ -62,6 +62,7 @@
 ;; HW1 Passes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; output of type-checking transitions from (Program ...) to (ProgramDefsExp ...) by type-check-Lfun
 (define (shrink p)
   (match p
     [(ProgramDefsExp info defs body)
@@ -1163,6 +1164,7 @@
                  labs))])
          (X86Program (cons (cons 'conflicts conflict-graph) info) labs))])))
 
+;; TODO: implement move biasing in challenge part of chap3
 (define (allocate_registers p)
   ;; uncover_live : X86Var -> X86Var + live-after sets
     (match p
@@ -1485,6 +1487,8 @@
                                              ,(Retq)))))])
        (X86Program info (cons main (cons conclusion labs))))]))
 
+;; reference to textbook page23 to figure out how
+;; the testing of this compiler works.
 (define compiler-passes
   `( ("shrink" ,shrink ,interp-Lfun-prime ,type-check-Lfun)
      ("uniquify" ,uniquify ,interp-Lfun-prime ,type-check-Lfun)
